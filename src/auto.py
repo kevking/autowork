@@ -8,6 +8,7 @@ import time
 class AUTO:
     def __init__(self):
         self.driver = webdriver.Chrome('../driver/chromedriver.exe') # 登录目标网页
+        self.driver.maximize_window()
 
     def login(self):
         self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
@@ -32,12 +33,12 @@ class AUTO:
     def send_key(self, value):
         self.driver.find_element_by_id("kw").send_keys(value)
 
-    def bussiness(self):
+    def chuxu(self):
         #点击储蓄存款日报表
         self.driver.switch_to.frame('contentFrame')
         ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[3]/div/iframe')
         self.driver.switch_to.frame(ifra)
-        self.driver.find_element_by_xpath('/html/body/div/div[2]/div/div[2]/div/ul/li[2]/p/a').click()
+        self.driver.find_element_by_xpath('/html/body/div/div[2]/div/div[2]/div/ul/li[1]/p/a').click()
         time.sleep(1)
         #切换到报表界面
         self.driver.switch_to.default_content()
@@ -59,13 +60,34 @@ class AUTO:
         self.driver.find_element_by_xpath('/html/body/div[9]/div[1]/table/tbody/tr[5]/td').click()
         #点击查询
         self.driver.find_element_by_xpath('/html/body/div[2]/div[1]/div/div[2]/table/tbody/tr/td[1]/div').click()
-        time.sleep(2)
+        time.sleep(1)
         #点击下载
         self.driver.switch_to.frame('report')
         self.driver.find_element_by_xpath('/html/body/div[1]/ul/li[1]/ul/li[2]/a/span').click()
 
+    def jingyin(self):
         #点击分支行经营情况总览表
         self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
+        time.sleep(2)
+        self.driver.switch_to.frame('contentFrame')
+        ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[3]/div/iframe')
+        self.driver.switch_to.frame(ifra)
+        self.driver.find_element_by_xpath('/html/body/div/div[2]/div/div[2]/div/ul/li[2]/p/a').click()
+        time.sleep(1)
+        #切换到报表界面
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame('reportWin')
+        #点击查询
+        self.driver.find_element_by_xpath('/html/body/div[2]/div[1]/div/div[2]/table/tbody/tr/td[1]/div/div').click()
+        time.sleep(1)
+        #点击下载
+        self.driver.switch_to.frame('report')
+        self.driver.find_element_by_xpath('/html/body/div[1]/ul/li[1]/ul/li[2]/a/span').click()
+
+    def cundai(self):
+        #点击存贷款日报表
+        self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
+        time.sleep(2)
         self.driver.switch_to.frame('contentFrame')
         ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[3]/div/iframe')
         self.driver.switch_to.frame(ifra)
@@ -81,26 +103,12 @@ class AUTO:
         self.driver.switch_to.frame('report')
         self.driver.find_element_by_xpath('/html/body/div[1]/ul/li[1]/ul/li[2]/a/span').click()
 
-        #点击存贷款日报表
-        self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
-        self.driver.switch_to.frame('contentFrame')
-        ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[3]/div/iframe')
-        self.driver.switch_to.frame(ifra)
-        self.driver.find_element_by_xpath('/html/body/div/div[2]/div/div[2]/div/ul/li[4]/p/a').click()
-        time.sleep(1)
-        #切换到报表界面
-        self.driver.switch_to.default_content()
-        self.driver.switch_to.frame('reportWin')
-        #点击查询
-        self.driver.find_element_by_xpath('/html/body/div[2]/div[1]/div/div[2]/table/tbody/tr/td[1]/div/div').click()
-        time.sleep(1)
-        #点击下载
-        self.driver.switch_to.frame('report')
-
+    def cunkuan(self):
         #点击存款日报表
         self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
+        time.sleep(2)
         self.driver.switch_to.frame('contentFrame')
-        ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[4]/div/iframe')
+        ifra = auto.driver.find_element_by_xpath('/html/body/div/div/div[1]/div[3]/div/iframe')
         self.driver.switch_to.frame(ifra)
         self.driver.find_element_by_xpath('/html/body/div/div[2]/div/div[2]/div/ul/li[4]/p/a').click()
         time.sleep(1)
@@ -117,10 +125,14 @@ class AUTO:
         time.sleep(1)
         #点击下载
         self.driver.switch_to.frame('report')
+        self.driver.find_element_by_xpath('/html/body/div[1]/ul/li[1]/ul/li[2]/a/span').click()
 
 
 if __name__ == '__main__':
     auto = AUTO()
     auto.login()
-    auto.bussiness()
+    auto.chuxu()
+    auto.cundai()
+    auto.cunkuan()
+    auto.jingyin()
 
