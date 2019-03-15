@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.keys import Keys
 import time
+import json
 
 
 class AUTO:
@@ -14,13 +15,16 @@ class AUTO:
         self.driver.get("http://rpt.mis.bcs:8080/rpt-web/index")
         time.sleep(1)
         # 提交表单登录
+
+        with open("c:/config.json", "r+") as f:
+            config = f.load()
         we_accout = self.driver.find_element_by_css_selector('#loginTable > tbody > tr:nth-child(2) > td:nth-child(2) > div > input')
         we_accout.clear()
-        we_accout.send_keys("5669")
+        we_accout.send_keys(config["NO"])
 
         we_accout = self.driver.find_element_by_css_selector('#loginTable > tbody > tr:nth-child(3) > td:nth-child(2) > div > input')
         we_accout.clear()
-        we_accout.send_keys("abcd@1234")
+        we_accout.send_keys(config["passwd"])
 
         # 点击提交
         self.driver.find_element_by_css_selector('#loginTable > tbody > tr:nth-child(4) > td:nth-child(2) > a').click()
