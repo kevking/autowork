@@ -16,8 +16,8 @@ class AUTO:
         time.sleep(1)
         # 提交表单登录
 
-        with open("c:/config.json", "r+") as f:
-            config = f.load()
+        with open("c://config.json", "r+") as f:
+            config = json.load(f)
         we_accout = self.driver.find_element_by_css_selector('#loginTable > tbody > tr:nth-child(2) > td:nth-child(2) > div > input')
         we_accout.clear()
         we_accout.send_keys(config["NO"])
