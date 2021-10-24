@@ -7,46 +7,24 @@ import json
 
 
 class Statement:
-    url = "http://rpt.mis.bcs:8080/rpt-web/index"
-    config_file = "c://config.json"
-    locateUsername = '#loginTable > tbody > tr:nth-child(2) > td:nth-child(2) > div > input'
-    locatePasswd = '#loginTable > tbody > tr:nth-child(3) > td:nth-child(2) > div > input'
-    locateSubmit = '#loginTable > tbody > tr:nth-child(4) > td:nth-child(2) > a'
-    locateMenuIframe = '/html/body/div/div/div[1]/div[3]/div/iframe'
-    locateMenu = ['/html/body/div/div[2]/div/div[2]/div/ul/li[0]/p/a',
-                  '/html/body/div/div[2]/div/div[2]/div/ul/li[1]/p/a',
-                  '/html/body/div/div[2]/div/div[2]/div/ul/li[2]/p/a',
-                  '/html/body/div/div[2]/div/div[2]/div/ul/li[3]/p/a',
-                  '/html/body/div/div[2]/div/div[2]/div/ul/li[4]/p/a']
-    locateChuxuXM = '/html/body/div[2]/div[1]/div/div[2]/form/div/ul/li[7]/ul/li[2]/div/div/div[3]/div'
-    locateCunkuanXM = '/html/body/div[2]/div[1]/div/div[2]/form/div/ul/li[6]/ul/li[2]/div/div/div[3]/div'
-    #locateChuxuJG = '/html/body/div[2]/div[1]/div/div[2]/form/div/ul/li[2]/ul/li[2]/div/div/div[3]/div'
-    locateChuxuItem = ['/html/body/div[9]/div[1]/table/tbody/tr[0]/td',
-                       '/html/body/div[9]/div[1]/table/tbody/tr[1]/td',
-                       '/html/body/div[9]/div[1]/table/tbody/tr[2]/td',
-                       '/html/body/div[9]/div[1]/table/tbody/tr[3]/td',
-                       '/html/body/div[9]/div[1]/table/tbody/tr[4]/td',
-                       '/html/body/div[9]/div[1]/table/tbody/tr[5]/td']
-
-    locateCunkuanItem = ['/html/body/div[8]/div[1]/table/tbody/tr[0]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[1]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[2]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[3]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[4]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[5]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[6]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[7]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[8]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[9]/td',
-                         '/html/body/div[8]/div[1]/table/tbody/tr[10]/td',
-                         ]
-
-    locateChaxun = '/html/body/div[2]/div[1]/div/div[2]/table/tbody/tr/td[1]/div/div'
-    locateDownload = '/html/body/div[1]/ul/li[1]/ul/li[2]/a/span'
-    # locateChuxuGZ = '/html/body/div[4]/div[1]/table/tbody/tr[3]/td'
+    url = "http://www.ejxjy.com/login.html"
+    config_file = "d://config.json"
+    locateUsername = '/html/body/div[4]/div[1]/div[2]/form/ul/li[1]/input'
+    locatePasswd = '/html/body/div[4]/div[1]/div[2]/form/ul/li[2]/input'
+    locateSubmit = '//*[@id="loginForm"]/ul/li[4]/input'
+    locateEsc =  '//*[@id="loaded"]/div[1]/a'
+    # 重新开课后请改回来
+    # locateWeixuexi = '//*[@id="a2"]'
+    locateWeixuexi = '//*[@id="a3"]'
+    # 重新开课后请改回来
+    # locateJxxx = '//*[@id="con_a_2"]/ul/li[1]/div[2]/a'
+    locateJxxx = '//*[@id="con_a_3"]/ul/li[1]/div[2]/a'
+    locateSave = '/html/body/div/div[1]/div[2]/ul/li[1]/a'
+    locateQueding = '/html/body/div[2]/div[4]/table/tbody/tr[2]/td[2]/div/div[2]/div/div[2]/button'
+    locateDuration = '/html/body/div/div[3]/div/div[1]/div[3]/div[7]/div[3]/div[1]/span[3]'
 
     def __init__(self):
-        self.driver = webdriver.Chrome('../driver/chromedriver.exe')  # 登录目标网页
+        self.driver = webdriver.Chrome(r'D:/Desktop/autowork-master/driver/chromedriver.exe')  # 登录目标网页
         self.driver.maximize_window()
 
     def login(self):
@@ -54,70 +32,65 @@ class Statement:
         # 提交表单登录
         with open(self.config_file, "r+") as f:
             config = json.load(f)
-        account = self.driver.find_element_by_css_selector(self.locateUsername)
-        account.clear()
-        account.send_keys(config["NO"])
-        account = self.driver.find_element_by_css_selector(self.locatePasswd)
-        account.clear()
-        account.send_keys(config["passwd"])
+        user_name = config["username"]
+        pass_word = config["passwd"]
+        print(user_name)
+        print(pass_word)
+        self.driver.find_element_by_xpath(self.locateUsername).send_keys(user_name)
+        self.driver.find_element_by_xpath(self.locatePasswd).send_keys(pass_word)
         # 点击提交
-        self.driver.find_element_by_css_selector(self.locateSubmit).click()
-
-    def enter_menu(self, locate):
-        self.driver.get(self.url)
-        time.sleep(1)
-        self.driver.switch_to.frame('contentFrame')
-        ifra = self.driver.find_element_by_xpath(self.locateMenuIframe)
-        self.driver.switch_to.frame(ifra)
-        self.driver.find_element_by_xpath(locate).click()
-        time.sleep(1)
-        # 切换到报表界面
-        self.driver.switch_to.default_content()
-        self.driver.switch_to.frame('reportWin')
-
-    def select_item(self, locate, item):
-        # 切换到报表界面
-        self.driver.switch_to.default_content()
-        self.driver.switch_to.frame('reportWin')
-        # 选择个人保本理财
-        self.driver.find_element_by_xpath(locate).click()
-        self.driver.find_element_by_xpath(item).click()
-
-    def download(self):
-        #点击查询
-        self.driver.find_element_by_xpath(self.locateChaxun).click()
-        time.sleep(1)
-        #点击下载
-        self.driver.switch_to.frame('report')
-        self.driver.find_element_by_xpath(self.locateDownload).click()
+        self.driver.find_element_by_xpath(self.locateSubmit).click()
 
     def run(self):
-        # 下载储蓄存款日报表-个人保本理财
-        self.enter_menu(self.locateMenu[1])
-        self.select_item(self.locateChuxuXM, self.locateChuxuItem[4])
-        self.download()
-        # 下载储蓄存款日报表(1)-个人结构性存款
-        self.select_item(self.locateChuxuXM, self.locateChuxuItem[5])
-        self.download()
-        # 下载储蓄存款日报表(2)-储蓄存款
-        self.select_item(self.locateChuxuXM, self.locateChuxuItem[2])
-        # self.select_item(self.locateChuxuJG, self.locateChuxuGZ)
-        self.download()
+        self.driver.implicitly_wait(5)
+        #关闭提示窗口
+        self.driver.find_element_by_xpath(self.locateEsc).click()
+        #点击未学习
+        self.driver.find_element_by_xpath(self.locateWeixuexi).click()
+        #点击继续学习
+        self.driver.find_element_by_xpath(self.locateJxxx).click()
+        time.sleep(2)
 
-        # 下载存贷款日报表
-        self.enter_menu(self.locateMenu[3])
-        self.download()
-        # 下载存款日报表
-        self.enter_menu(self.locateMenu[4])
-        self.select_item(self.locateCunkuanXM, self.locateCunkuanItem[9])
-        self.download()
-        # 下载经营情况总览表
-        self.enter_menu(self.locateMenu[2])
-        self.download()
+    def isExist(self, element):
+        flag = True
+        browser = self.driver
+        try:
+            browser.find_element_by_xpath(element)
+            return flag
+        except:
+            flag = False
+            return flag
+
+    def close(self):
+        #获取窗口句柄
+        windows = self.driver.window_handles
+        #切换到新窗口
+        self.driver.switch_to.window(windows[1])
+        # 获取到视频时长，直接睡指定时间
+        shijian = self.driver.find_element_by_xpath(self.locateDuration).text.split(':',1)
+        print(int(shijian[0])*60 + int(shijian[1]))
+        time.sleep(int(shijian[0])*60 + int(shijian[1]) + 10)
+        #判断是否弹出完成提示
+        if self.isExist(self.locateQueding):
+            self.driver.find_element_by_xpath(self.locateQueding).click()
+        # 保存
+        self.driver.find_element_by_xpath(self.locateSave).click()
+        time.sleep(2)
+        self.driver.close()
+        self.driver.switch_to.window(windows[0])
+        self.driver.refresh()
+        time.sleep(5)
+        return True
+
+
+
+
+
 
 
 if __name__ == '__main__':
     auto = Statement()
     auto.login()
     auto.run()
-
+    while auto.close():
+        auto.run()
